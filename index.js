@@ -42,44 +42,61 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/toy", async (req, res) => {
+      console.log(req.query.email);
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email };
+      }
+      const result = await addedCollection.find(query).toArray();
+      res.send(result);
+    });
 
-
-
-    app.get('/toy', async(req,res)=>{
-        console.log(req.query.email);
-        let query ={};
-        if(req.query?.email){
-            query={ email: req.query.email}
-        }
-        const result = await addedCollection.find(query).toArray();
-        res.send(result);
-    })
-
-
-
-
-
-    app.post('/toy', async(req, res) => {
+    app.post("/toy", async (req, res) => {
       const addtoy = req.body;
-      console.log(addtoy);
       const result = await addedCollection.insertOne(addtoy);
       res.send(result);
     });
 
-
-    app.put('/toy/:id', async(req,res)=>{
-      const updatedToy = req.body;
-    })
-
-    app.delete('/toy/:id', async(req,res)=>{
+    app.get("/toy/:id", async (req, res) => {
       const id = req.params.id;
-      const query = {_id : new ObjectId(id)}
+      const query = { _id: new ObjectId(id) };
+      const result = await addedCollection.findOne(query);
+      res.send(result);
+    });
+
+    app.put("/toy/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+
+      const updatedToy = req.body;
+      const options = { upsert: true };
+      const updateToy = {
+        $set: {
+          name: updatedToy.name,
+
+          email: updatedToy.email,
+          toyName: updatedToy.toyName,
+          image: updatedToy.image,
+          category: updatedToy.category,
+          quantity: updatedToy.quantity,
+          price: updatedToy.price,
+        },
+      };
+      const result = await addedCollection.updateOne(
+        filter,
+        updateToy,
+        options
+      );
+      res.send(result);
+    });
+
+    app.delete("/toy/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
       const result = await addedCollection.deleteOne(query);
       res.send(result);
-    })
-
-
-
+    });
 
     // app.get('/addedtoys', async(req,res)=> {
     //     const addedToy = req.body;
