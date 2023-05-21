@@ -45,11 +45,19 @@ async function run() {
 
 
 
+    app.get('/toy', async(req,res)=>{
+        console.log(req.query.email);
+        let query ={};
+        if(req.query?.email){
+            query={ email: req.query.email}
+        }
+        const result = await addedCollection.find(query).toArray();
+        res.send(result);
+    })
 
 
 
 
-    
 
     app.post('/toy', async(req, res) => {
       const addtoy = req.body;
@@ -57,6 +65,21 @@ async function run() {
       const result = await addedCollection.insertOne(addtoy);
       res.send(result);
     });
+
+
+    app.put('/toy/:id', async(req,res)=>{
+      const updatedToy = req.body;
+    })
+
+    app.delete('/toy/:id', async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id : new ObjectId(id)}
+      const result = await addedCollection.deleteOne(query);
+      res.send(result);
+    })
+
+
+
 
     // app.get('/addedtoys', async(req,res)=> {
     //     const addedToy = req.body;
