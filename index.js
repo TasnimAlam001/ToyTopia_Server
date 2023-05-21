@@ -98,10 +98,7 @@ async function run() {
       res.send(result);
     });
 
-    // app.get('/addedtoys', async(req,res)=> {
-    //     const addedToy = req.body;
-    //     console.log(req.body);
-    // });
+    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -109,14 +106,14 @@ async function run() {
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
   } finally {
-    // Ensures that the client will close when you finish/error
+    
     // await client.close();
   }
 }
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("jkgvawoherpvgn bkhb fbfowehfwerijv");
+  res.send("ToyTopia server side is runnig");
 });
 
 app.listen(port, () => {
